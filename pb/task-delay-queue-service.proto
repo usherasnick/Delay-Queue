@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+option go_package = "github.com/usherasnick/Delay-Queue/api";
+package usherasnick.photon_dance_delay_queue;
+
+message Task
+{
+	/* 任务唯一标识, 用来检索/删除指定的任务 */
+	string id = 1;
+	/* 任务类型, 可以是具体的业务名称 */
+	string attached_topic = 2;
+	/* 任务需要延迟执行的时间, 单位: 秒 */
+	int32 delay = 3;
+	/* 任务执行超时的时间, 单位: 秒 */
+	int32 ttr = 4;
+	/* 任务内容, 供消费者做具体的业务处理, 以json格式存储 */
+	string payload = 5;
+}
+
+message PushTaskRequest
+{
+	Task task = 1;
+}
+
+message PushTaskResponse {}
+
+message FinishTaskRequest
+{
+	string task_id = 1;
+}
+
+message FinishTaskResponse {}
+
+message CheckTaskRequest
+{
+	string task_id = 1;
+}
+
+message CheckTaskResponse
+{
+	Task task = 1;
+}
+
+message SubscribeTopicRequest
+{
+	string topic = 1;
+}
+
+message SubscribeTopicResponse {}
+
+message UnsubscribeTopicRequest
+{
+	string topic = 1;
+}
+
+message UnsubscribeTopicResponse {}
+
+service TaskDelayQueueService
+{
+	/* for task producers */
+	rpc PushTask(PushTaskRequest) returns (PushTaskResponse);
+	rpc FinishTask(FinishTaskRequest) returns (FinishTaskResponse);
+	rpc CheckTask(CheckTaskRequest) returns (CheckTaskResponse);
+	/* for task comsumers */
+	rpc SubscribeTopic(SubscribeTopicRequest) returns (SubscribeTopicResponse);
+	rpc UnsubscribeTopic(UnsubscribeTopicRequest) returns (UnsubscribeTopicResponse);
+}
