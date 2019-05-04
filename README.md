@@ -17,7 +17,7 @@ Redis-based delay queue is designed to provide message queue with delay-job-dist
 
 #### Clone
 
-* Clone this repo to your local machine using https://github.com/usherasnick/Delay-Queue.git.
+* Clone this repo to your local machine using https://github.com/usherasnick/Delay-Queue.git
 
 #### Setup
 
@@ -43,7 +43,7 @@ make build
 
 ### Step 3
 
-* 🔃 Create a new PR using https://github.com/usherasnick/Delay-Queue/compare!
+* 🔃 Create a new PR using https://github.com/usherasnick/Delay-Queue/compare
 
 ## License
 
