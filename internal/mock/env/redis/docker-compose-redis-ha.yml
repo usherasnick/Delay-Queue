@@ -1,0 +1,113 @@
+version: "3.7"
+services:
+  #
+  # [ server stack ]
+  #
+  # - redis_master
+  # - redis_slave01
+  # - redis_slave02
+  # - redis_sentinel01
+  # - redis_sentinel02
+  # - redis_sentinel03
+  #
+  redis_master:
+    image: redis:6.2-rc-alpine3.12
+    hostname: redis_master
+    container_name: redis_master
+    command: redis-server /usr/local/etc/redis/redis-master.conf
+    ports:
+      - 16379:6379
+    volumes:
+      - ~/gomodule/github.com/usherasnick/Delay-Queue/mock/env/redis/conf.d/:/usr/local/etc/redis/
+    networks:
+      vpcbr:
+        ipv4_address: 192.168.1.2
+
+  redis_slave01:
+    image: redis:6.2-rc-alpine3.12
+    hostname: redis_slave01
+    container_name: redis_slave01
+    command: redis-server /usr/local/etc/redis/redis-slave01.conf
+    ports:
+      - 16380:6379
+    volumes:
+      - ~/gomodule/github.com/usherasnick/Delay-Queue/mock/env/redis/conf.d/:/usr/local/etc/redis/
+    networks:
+      vpcbr:
+        ipv4_address: 192.168.1.3
+    depends_on:
+      - redis_master
+
+  redis_slave02:
+    image: redis:6.2-rc-alpine3.12
+    hostname: redis_slave02
+    container_name: redis_slave02
+    command: redis-server /usr/local/etc/redis/redis-slave02.conf
+    ports:
+      - 16381:6379
+    volumes:
+      - ~/gomodule/github.com/usherasnick/Delay-Queue/mock/env/redis/conf.d/:/usr/local/etc/redis/
+    networks:
+      vpcbr:
+        ipv4_address: 192.168.1.4
+    depends_on:
+      - redis_master
+
+  redis_sentinel01:
+    image: redis:6.2-rc-alpine3.12
+    hostname: redis_sentinel01
+    container_name: redis_sentinel01
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    ports:
+      - 26379:26379
+    volumes:
+      - ~/gomodule/github.com/usherasnick/Delay-Queue/mock/env/redis/conf.d/:/usr/local/etc/redis/
+    networks:
+      vpcbr:
+        ipv4_address: 192.168.1.5
+    depends_on:
+      - redis_master
+      - redis_slave01
+      - redis_slave02
+
+  redis_sentinel02:
+    image: redis:6.2-rc-alpine3.12
+    hostname: redis_sentinel02
+    container_name: redis_sentinel02
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    ports:
+      - 26380:26379
+    volumes:
+      - ~/gomodule/github.com/usherasnick/Delay-Queue/mock/env/redis/conf.d/:/usr/local/etc/redis/
+    networks:
+      vpcbr:
+        ipv4_address: 192.168.1.6
+    depends_on:
+      - redis_master
+      - redis_slave01
+      - redis_slave02
+
+  redis_sentinel03:
+    image: redis:6.2-rc-alpine3.12
+    hostname: redis_sentinel03
+    container_name: redis_sentinel03
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    ports:
+      - 26381:26379
+    volumes:
+      - ~/gomodule/github.com/usherasnick/Delay-Queue/mock/env/redis/conf.d/:/usr/local/etc/redis/
+    networks:
+      vpcbr:
+        ipv4_address: 192.168.1.7
+    depends_on:
+      - redis_master
+      - redis_slave01
+      - redis_slave02
+
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
+          gateway: 192.168.1.1
