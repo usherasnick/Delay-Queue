@@ -1,0 +1,8 @@
+{
+    "task": {
+        "attached_topic": "inventory_service_line",
+        "id": "51e5b426-3f5f-4044-b469-713b56bceb3a",
+        "delay": 25,
+        "ttr": 180
+    }
+}
